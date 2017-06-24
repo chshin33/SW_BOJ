@@ -4,7 +4,7 @@ import java.io.InputStreamReader;
 import java.util.Arrays;
 import java.util.StringTokenizer;
 
-public class BinarySearch_2805_1 {
+public class BinarySearch_2805WA {
 	static int N;
 	static long M;
 	static long[] input;
