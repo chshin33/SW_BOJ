@@ -7,15 +7,15 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.StringTokenizer;
 
-public class DFS_Cycle_9466TLE {
+public class DFS_Cycle_Recursice_9466 {
 	static int V;
 	static ArrayList<Integer>[] adjList;
 	static int[] visitOrder;
 	static int[] parent;
-	static int[] checkSameTry;
+	static int[] sameTry;
 	static int visitNumber;
 	static boolean findCycle;
-	static ArrayList<Integer> cycleList;
+	static int[] cycleList;
 	static int DEBUG = 0;
 	static int Answer;
 
@@ -26,6 +26,7 @@ public class DFS_Cycle_9466TLE {
 		StringTokenizer st = new StringTokenizer(br.readLine());
 		int T = Integer.parseInt(st.nextToken());
 
+		long startTime = System.currentTimeMillis();
 		for (int testCase = 1; testCase <= T; testCase++) {
 			st = new StringTokenizer(br.readLine());
 			V = Integer.parseInt(st.nextToken());
@@ -38,12 +39,9 @@ public class DFS_Cycle_9466TLE {
 
 			st = new StringTokenizer(br.readLine());
 			int val;
-			cycleList = new ArrayList<Integer>();
+
 			for (int i = 1; i <= V; i++) {
 				val = Integer.parseInt(st.nextToken());
-				/*if (i == val) {
-					cycleList.add(i);
-				}*/
 				adjList[i].add(val);
 			}
 
@@ -55,70 +53,67 @@ public class DFS_Cycle_9466TLE {
 
 			visitOrder = new int[V + 1];
 			parent = new int[V + 1];
-			checkSameTry = new int[V + 1];
+			sameTry = new int[V + 1];
+			cycleList = new int[V + 1];
 
-			
 			findCycle = false;
 
 			Answer = 0;
 
-			Arrays.fill(visitOrder, -1);
 			visitNumber = 1;
 
 			for (int i = 1; i <= V; i++) {
-				if(visitOrder[i]==-1){
+				if (visitOrder[i] == 0 && cycleList[i] == 0) {
 					DFS(i);
 				}
 			}
 
-			if(DEBUG==1) bw.write(cycleList.toString()+"\n");
-			Answer = V - cycleList.size();
-			bw.write(Integer.toString(Answer) + "\n");
-
+			bw.write(Integer.toString(V-Answer) + "\n");
 		}
 
+		bw.write("Time: " + (System.currentTimeMillis() - startTime) / 1000.0 + "\n");
 		bw.flush();
 		bw.close();
 	}
 
 	static void DFS(int now) {
 		visitOrder[now] = visitNumber++;
-		checkSameTry[now] = 1;
+		sameTry[now] = 1;
 
-		if (adjList[now] != null) {
-			for (int adj : adjList[now]) {
-				if (visitOrder[adj] == -1) {
-					parent[adj] = now;
-					DFS(adj);
-					if (findCycle == true) {
-						break;
-						//checkSameTry[now] = 0;
-						//return;
-					}
-				} else if (checkSameTry[adj] == 1 && visitOrder[adj] == visitOrder[now]) {
-					findCycle = true;
-					cycleList.add(now);
-					break;
-				} else if (checkSameTry[adj] == 1 && visitOrder[adj] < visitOrder[now]) {
-					findCycle = true;
-					process(adj, now); // 시작점, 끝점
-					break;
+		if (adjList[now] == null) {
+			sameTry[now] = 0;
+			return;
+		}
+
+		for (int adj : adjList[now]) {
+			if (visitOrder[adj] == 0 && cycleList[adj] == 0) {
+				parent[adj] = now;
+				DFS(adj);
+				if (findCycle == true) {
+					 break;
 				}
+			} else if (visitOrder[adj] == visitOrder[now] && sameTry[adj] == 1 && cycleList[adj]==0) {
+				findCycle = true;
+				cycleList[adj] = 1;
+				Answer++;
+				break;
+			} else if (visitOrder[adj] < visitOrder[now] && sameTry[adj] == 1 && cycleList[adj]==0) {
+				findCycle = true;
+				addCycle(adj, now); // 시작점, 끝점
+				break;
 			}
 		}
 
-		checkSameTry[now] = 0;
+		sameTry[now] = 0;
 
 	}
 
-	static void process(int start, int end) {
+	static void addCycle(int start, int end) {
 		// start와 end가 다르고 end가 0이면 0의 부모는 없으로 스택오버플로
 		if (start != end && end != 0) {
-			process(start, parent[end]);
+			addCycle(start, parent[end]);
 		}
-		if(cycleList.contains(end)==false){
-			cycleList.add(end);
-		}
-		// System.out.println(end);
+		cycleList[end] = 1;
+		Answer++;
 	}
 }

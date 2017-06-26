@@ -3,37 +3,43 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.StringTokenizer;
-
 public class DFS_Cycle_9466 {
 
-	private void solve() {
-		int t = sc.nextInt();
-		StringBuilder sb = new StringBuilder();
-
+	static int N;
+	static int Answer;
+	public static void main(String[] args) throws Exception{
+		System.setIn(new FileInputStream("sample/sample_DFS_Cycle_9466.txt"));
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		StringTokenizer st = new StringTokenizer(br.readLine());
+		
+		int T = Integer.parseInt(st.nextToken());
+		
+		long startTime = System.currentTimeMillis();
 		// a - 인접, c - 방문, s - 정점기준
+		for(int testCase=1; testCase<=T; testCase++){
+			st = new StringTokenizer(br.readLine());
+			N = Integer.parseInt(st.nextToken());
+			int[] a = new int[N + 1];
+			int[] c = new int[N+ 1];
+			int[] s = new int[N + 1];
+			Answer = 0;
 
-		while (t-- > 0) {
-			int n = sc.nextInt();
-
-			int[] a = new int[n + 1];
-			int[] c = new int[n + 1];
-			int[] s = new int[n + 1];
-			int ans = 0;
-
-			for (int i = 1; i <= n; i++) {
-				int v = sc.nextInt();
-
+			st = new StringTokenizer(br.readLine());
+			for (int i = 1; i <= N; i++) {
+				int v = Integer.parseInt(st.nextToken());
 				a[i] = v;
 			}
 			
-			for(int i=1;i<=n;i++) {
+			for(int i=1;i<=N;i++) {
 				if (c[i] == 0) {
-					ans += dfs(a,c,s,i,i);
+					Answer += dfs(a,c,s,i,i);
 				}
 			}
-			sb.append((n - ans) + "\n");
+			
 		}
-		System.out.println(sb.toString());
+		
+		System.out.println(N - Answer);
+		//System.out.println("Time: " + (System.currentTimeMillis()-startTime)/1000.0 + "\n");
 	}
 
 	public static int dfs(int[] a, int[] c, int[] s, int v, int step) {
@@ -57,59 +63,5 @@ public class DFS_Cycle_9466 {
 		}
 		
 	}
-
-	public static void main(String[] args) throws Exception{
-		sc.init();
-
-		new DFS_Cycle_9466().solve();
-	}
-
-	static class sc {
-		private static BufferedReader br;
-		private static StringTokenizer st;
-
-		static void init() throws Exception{
-			System.setIn(new FileInputStream("sample/sample_DFS_Cycle_9466.txt"));
-			br = new BufferedReader(new InputStreamReader(System.in));
-			st = new StringTokenizer("");
-		}
-
-		static String readLine() {
-			try {
-				return br.readLine();
-			} catch (IOException e) {
-			}
-			return null;
-		}
-
-		static String readLineReplace() {
-			try {
-				return br.readLine().replaceAll("\\s+", "");
-			} catch (IOException e) {
-			}
-			return null;
-		}
-
-		static String next() {
-			while (!st.hasMoreTokens()) {
-				try {
-					st = new StringTokenizer(br.readLine());
-				} catch (IOException e) {
-				}
-			}
-			return st.nextToken();
-		}
-
-		static long nextLong() {
-			return Long.parseLong(next());
-		}
-
-		static int nextInt() {
-			return Integer.parseInt(next());
-		}
-
-		static double nextDouble() {
-			return Double.parseDouble(next());
-		}
-	}
+	
 }
