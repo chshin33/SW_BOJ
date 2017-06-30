@@ -1,0 +1,14 @@
+3
+abababab
+2
+ab
+abab
+ababa
+3
+ab
+a
+b
+abababababa
+2
+aba
+abab
