@@ -8,11 +8,11 @@ public class BFS_Wordprocessor {
 	
 	public static class Word{
 		String word;
-		int index, position, count;
-		public Word(String word, int index, int position, int count){
+		int index, findposition, count;
+		public Word(String word, int index, int findposition, int count){
 			this.word = word;
 			this.index = index;
-			this.position = position;
+			this.findposition = findposition;
 			this.count = count;
 		}
 	}
@@ -64,13 +64,13 @@ public class BFS_Wordprocessor {
 			while(queue.isEmpty()==false){
 				Word now = queue.poll();
 				if(DEBUG==1){
-					System.out.println("Poll result - word: " + now.word + ", index: " + now.index + ", position: " + now.position + ", count: " + now.count);
+					System.out.println("Poll result - word: " + now.word + ", index: " + now.index + ", position: " + now.findposition + ", count: " + now.count);
 				}				
 				if(now.count >= Answer){//사용단어 개수가 현재까지 구한 최소값 이상이면 skip
 					continue;
 				}
 
-				startPos = now.position + now.word.length();
+				startPos = now.findposition + now.word.length();
 				endPos = input.length();
 				remain = input.substring(startPos, endPos);
 				if(DEBUG==1){
