@@ -1,6 +1,7 @@
 import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
+import java.util.Arrays;
 import java.util.StringTokenizer;
 
 public class DP_MoveCase {
@@ -34,6 +35,10 @@ public class DP_MoveCase {
 
 			DP = new int[N + 1][N + 1];
 			check = new int[N + 1][N + 1];
+			
+			for(int[] row : check){
+				Arrays.fill(row, -1);
+			}
 
 			int ax,ay,bx,by;
 			for (int i = 1; i <= K; i++) {
@@ -42,8 +47,16 @@ public class DP_MoveCase {
 				ay = Integer.parseInt(st.nextToken());
 				bx = Integer.parseInt(st.nextToken());
 				by = Integer.parseInt(st.nextToken());
-				check[ax][ay] =1;
-				check[bx][by] =1;
+				if(ax==1&&ay==1){
+					check[ax][ay] =1;
+					check[bx][by] =0;
+				}else if(bx==N&&by==N){
+					check[ax][ay] =0;
+					check[bx][by] =1;
+				}else{
+					check[ax][ay] =1;
+					check[bx][by] =1;
+				}
 			}
 			
 			if(DEBUG==1) {
@@ -53,18 +66,15 @@ public class DP_MoveCase {
 
 			for (int i = 1; i <= N; i++) {
 				for (int j = 1; j <= N; j++) {
-					
-					
-					
-					
-					
 					if (i == 1 && j == 1) {
 						DP[i][j] = 1;
 					}else{
-						DP[i][j] = (DP[i - 1][j] % MOD + DP[i][j - 1] % MOD) % MOD;
-						//DP[i][j] = DP[i - 1][j]  + DP[i][j - 1] ;						
+						if(check[i][j]==0){
+							DP[i][j] = 0;
+						}else{
+							DP[i][j] = (DP[i - 1][j] % MOD + DP[i][j - 1] % MOD) % MOD;	
+						}
 					}
-
 				}
 			}
 			
